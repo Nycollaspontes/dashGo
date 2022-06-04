@@ -1,17 +1,17 @@
-import { FormControl, FormLabel , Input as ChakraInput , InputProps as ChakraInputProps  } from "@chakra-ui/react";
+import { FormControl, FormLabel, Input as ChakraInput, InputProps as ChakraInputProps } from "@chakra-ui/react";
+import { forwardRef ,ForwardRefRenderFunction } from "react";
 
 interface InputProps extends ChakraInputProps {
     name: string;
     label?: string;
-} 
+}
 
 
-export function Input({ name, label, ...rest }: InputProps) {
+export const InputBase: ForwardRefRenderFunction<HTMLInputElement , InputProps> = 
+({ name, label, ...rest }, ref) => {
     return (
-
         <FormControl>
-
-            { !!label && <FormLabel htmlFor={name}>{label}</FormLabel>}                 
+            {!!label && <FormLabel htmlFor={name}>{label}</FormLabel>}
 
             <ChakraInput
                 name={name}
@@ -25,6 +25,7 @@ export function Input({ name, label, ...rest }: InputProps) {
                 }}
                 size='lg'
                 {...rest}
+                ref={ref}
             />
 
         </FormControl>
@@ -32,3 +33,5 @@ export function Input({ name, label, ...rest }: InputProps) {
 
     )
 }
+
+export const Input = forwardRef(InputBase);
