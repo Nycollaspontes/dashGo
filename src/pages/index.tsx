@@ -1,17 +1,34 @@
 import { Flex, Button, Stack } from '@chakra-ui/react';
-import { useForm } from 'react-hook-form';
+import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 import { Input } from '../components/form/Input';
-
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
 
 
 
 export default function SignIn() {
+  // Criacao do schema de validacao 
+  const signInFormSchema = yup.object().shape({
+    email: yup.string().required('E-mail Obrigatório').email('E-mail invalido'),
+    password: yup.string().required('Senha Obrigatória'),
+  })
 
-  const { register , handleSubmit} = useForm();
+  // Desestruturacao de ferramentas vindas do useForm
+  const { register, handleSubmit, formState } = useForm({
+    // Resolver de validacao passando meu schema
+    resolver: yupResolver(signInFormSchema)
+  });
 
-  function handleSignIn(data){
-    console.log(data)
+  // Atribuicao de erros vindo do useForm
+  const errors = formState.errors;
+  console.log(errors)
+
+  // Funcao de sign in Que recebe os inputs
+  const handleSignIn: SubmitHandler<FieldValues> = async (data, event) => {
+    await new Promise(resolve => setTimeout(resolve, 2000))
+
   }
+
 
 
   return (
@@ -29,13 +46,25 @@ export default function SignIn() {
         borderRadius={8}
         flexDir='column'
         onSubmit={handleSubmit(handleSignIn)}>
-         
+
 
         <Stack spacing='4'>
 
 
-          <Input name='email' label='E-mail' type='email' {...register}/>
-          <Input name='password' label='Senha' type='password' {...register}/>
+          <Input
+
+            label='E-mail'
+            type='email'
+            {...register('email')}
+            error={errors.email}
+          />
+          <Input
+
+            label='Senha'
+            type='password'
+            {...register('password')}
+            error={errors.password}
+          />
 
         </Stack>
 
@@ -44,6 +73,7 @@ export default function SignIn() {
           mt='6'
           colorScheme='pink'
           size='lg'
+          isLoading={formState.isSubmitting}
         >
           Entrar
 
