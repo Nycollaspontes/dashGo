@@ -1,5 +1,6 @@
 import { Text, Box, Button, Checkbox, Flex, Heading, Icon, Table, Tbody, Td, Th, Thead, Tr, useBreakpointValue, Spinner } from "@chakra-ui/react";
 import Link from "next/link";
+import { useState } from "react";
 
 import { RiAddLine } from "react-icons/ri";
 import { Header } from "../../components/header/Index";
@@ -11,13 +12,13 @@ import { useUsers } from "../../services/hooks/useUsers";
 
 
 export default function UserList() {
-    const { data, isLoading,isFetching, error } = useUsers();
+    const [page , setPage] = useState(1);
+    const { data, isLoading,isFetching, error } = useUsers(page);
 
     const wideVersion = useBreakpointValue({
         base: false,
         lg: true,
     })
-
 
     return (
         <Box>
@@ -70,7 +71,7 @@ export default function UserList() {
                                         </Thead>
 
                                         <Tbody>
-                                            {data.map((user: { id: string; name: string; email: string; createdAt: string; }) => {
+                                            {data?.users.map((user: { id: string; name: string; email: string; createdAt: string; }) => {
                                                 return (
                                                     <Tr key={user.id}>
 
@@ -92,9 +93,9 @@ export default function UserList() {
                                     </Table>
 
                                     <Pagination 
-                                     totalCountOfRegisters={200}
-                                     onPageChange = {() => {}}
-                                     currentPage={5}/>
+                                     totalCountOfRegisters={data.totalCount}
+                                     onPageChange = {setPage}
+                                     currentPage={page}/>
                                 </>
                             )}
 
