@@ -9,6 +9,11 @@ type User = {
 
 export function makeServer() {
     const server = createServer({
+        serializers : {
+            application: ActiveModelSerializer,
+        }
+
+        ,
         models: {
             user: Model.extend<Partial<User>>({})
         },
@@ -52,7 +57,7 @@ export function makeServer() {
                 )
               });
 
-
+            this.get('/users/:id')
             this.post('/users');
 
             this.namespace = '';

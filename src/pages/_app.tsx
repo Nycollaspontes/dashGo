@@ -4,15 +4,15 @@ import { theme } from '../styles/theme';
 import { SidebarDrawerProvider } from '../contexts/SideBarDrawerContext';
 import { makeServer } from '../services/mirage/index';
 
-import { QueryClient, QueryClientProvider } from 'react-query';
+import { QueryClientProvider } from 'react-query';
 
 import { ReactQueryDevtools } from 'react-query/devtools'
+import { queryClient } from '../services/queryClient';
 
 if (process.env.NODE_ENV === 'development') {
   makeServer();
 }
 
-const queryClient = new QueryClient();
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
